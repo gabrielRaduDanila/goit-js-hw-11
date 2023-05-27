@@ -98,6 +98,8 @@ body {
   margin-top: 10px;
   display: block;
   margin: auto;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
 
