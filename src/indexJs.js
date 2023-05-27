@@ -46,27 +46,32 @@ const submitHandler = async e => {
   pageNum = 1;
   loading.classList.remove('hidden');
   typedValue = formInput.value;
-
-  try {
-    const submitResponse = await receivedImages(typedValue, pageNum);
-    const images = submitResponse.hits;
-    const numberOfImages = submitResponse.totalHits;
+  typedValue = typedValue.trim();
+  if (typedValue) {
+    try {
+      const submitResponse = await receivedImages(typedValue, pageNum);
+      const images = submitResponse.hits;
+      const numberOfImages = submitResponse.totalHits;
+      loading.classList.add('hidden');
+      if (!numberOfImages) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        clearGallery();
+        return;
+      }
+      Notiflix.Notify.info(`"Hooray! We found ${numberOfImages} images.`);
+      displayImages(images);
+      if (numberOfImages > imagesPerPage) {
+        loadMoreBtn.classList.remove('hidden');
+        totalImagesFound = numberOfImages;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    Notiflix.Notify.failure('Please type the image you want to see');
     loading.classList.add('hidden');
-    if (!numberOfImages) {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      clearGallery();
-      return;
-    }
-    Notiflix.Notify.info(`"Hooray! We found ${numberOfImages} images.`);
-    displayImages(images);
-    if (numberOfImages > imagesPerPage) {
-      loadMoreBtn.classList.remove('hidden');
-      totalImagesFound = numberOfImages;
-    }
-  } catch (err) {
-    console.log(err);
   }
 };
 
