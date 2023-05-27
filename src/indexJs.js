@@ -3,14 +3,14 @@
 import Notiflix from 'notiflix';
 import { getElement } from './jsFiles/getElement.js';
 import { receivedImages } from './jsFiles/fetchRequests.js';
-import { displayImages } from './jsFiles/displayHandlers.js';
+import { displayImages, clearGallery } from './jsFiles/displayHandlers.js';
 
 // variabiles
 
 const searchForm = getElement('.search-form');
 const formInput = getElement('.search-form input');
 export const gallery = getElement('.gallery');
-const loadMoreBtn = getElement('.load-more');
+export const loadMoreBtn = getElement('.load-more');
 export const loading = getElement('.loading');
 
 let typedValue = '';
@@ -56,7 +56,7 @@ const submitHandler = async e => {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-
+      clearGallery();
       return;
     }
     Notiflix.Notify.info(`"Hooray! We found ${numberOfImages} images.`);

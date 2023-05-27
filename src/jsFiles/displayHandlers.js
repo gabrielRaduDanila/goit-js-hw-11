@@ -2,15 +2,15 @@
 
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { loading, gallery } from '../indexJs.js';
+import { loading, gallery, loadMoreBtn } from '../indexJs.js';
 
 // exports
 
-// export const clearGallery = () => {
-//   gallery.innerHTML = '';
-//   loadMoreBtn.classList.add('hidden');
-//   loading.classList.add('hidden');
-// };
+export const clearGallery = () => {
+  gallery.innerHTML = '';
+  loadMoreBtn.classList.add('hidden');
+  loading.classList.add('hidden');
+};
 
 export const displayImages = images => {
   gallery.innerHTML = '';
