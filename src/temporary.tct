@@ -1,0 +1,4 @@
+36761975-e2cf261ee0afc31e5120bc8bc  - key
+
+const url = `https://pixabay.com/api/?key=36761975-e2cf261ee0afc31e5120bc8bc&q=${typedValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${imagesPerPage}&page=${pageNum}`;
+
