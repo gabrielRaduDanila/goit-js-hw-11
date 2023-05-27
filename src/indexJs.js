@@ -3,7 +3,8 @@
 import Notiflix from 'notiflix';
 import { getElement } from './jsFiles/getElement.js';
 import { receivedImages } from './jsFiles/fetchRequests.js';
-import { clearGallery, displayImages } from './jsFiles/displayHandlers.js';
+import { displayImages } from './jsFiles/displayHandlers.js';
+import { scrollHandler } from './jsFiles/scrollHandler.js';
 // variabiles
 
 const searchForm = getElement('.search-form');
@@ -64,6 +65,10 @@ const submitHandler = async e => {
       loadMoreBtn.classList.remove('hidden');
       totalImagesFound = numberOfImages;
     }
+    document.addEventListener('scroll', scrollHandler);
+    gallery.addEventListener('click', () =>
+      document.removeEventListener('scroll', scrollHandler)
+    );
   } catch (err) {
     console.log(err);
   }

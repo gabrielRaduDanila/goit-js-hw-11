@@ -6,11 +6,11 @@ import { loading, gallery } from '../indexJs.js';
 
 // exports
 
-export const clearGallery = () => {
-  gallery.innerHTML = '';
-  loadMoreBtn.classList.add('hidden');
-  loading.classList.add('hidden');
-};
+// export const clearGallery = () => {
+//   gallery.innerHTML = '';
+//   loadMoreBtn.classList.add('hidden');
+//   loading.classList.add('hidden');
+// };
 
 export const displayImages = images => {
   gallery.innerHTML = '';
