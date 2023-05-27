@@ -14,16 +14,27 @@ export const loading = getElement('.loading');
 
 let typedValue = '';
 let imagesPerPage = 40;
-let pageNum = 1;
+let pageNum = null;
 let totalImagesFound = null;
 
 const loadNextImages = async () => {
   pageNum++;
+  const totalpages = Math.ceil(totalImagesFound / imagesPerPage);
   try {
     const submitResponse = await receivedImages(typedValue, pageNum);
     const newImages = submitResponse.hits;
     gallery.innerHTML = '';
     displayImages(newImages);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    if (pageNum === totalpages) {
+      Notiflix.Notify.warning(
+        "We're sorry, but you've reached the end of search results."
+      );
+      loadMoreBtn.classList.add('hidden');
+    }
   } catch (err) {
     console.log(err);
   }
@@ -31,6 +42,7 @@ const loadNextImages = async () => {
 
 const submitHandler = async e => {
   e.preventDefault();
+  pageNum = 1;
   loading.classList.remove('hidden');
   typedValue = formInput.value;
 
