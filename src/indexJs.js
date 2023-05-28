@@ -83,6 +83,10 @@ export const infiniteLoading = async () => {
 
 const submitHandler = async e => {
   e.preventDefault();
+  window.removeEventListener('scroll', scrollHandler);
+  if (pageNum !== 1) {
+    selectScrollingContainer.classList.remove('hidden');
+  }
   pageNum = 1;
   loading.classList.remove('hidden');
   typedValue = formInput.value;
@@ -93,6 +97,7 @@ const submitHandler = async e => {
       const images = submitResponse.hits;
       const numberOfImages = submitResponse.totalHits;
       loading.classList.add('hidden');
+      selectScrollingContainer.classList.add('hidden');
       if (!numberOfImages) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -103,6 +108,7 @@ const submitHandler = async e => {
       Notiflix.Notify.info(`"Hooray! We found ${numberOfImages} images.`);
       displayImages(images);
       if (numberOfImages > imagesPerPage) {
+        selectScrollingContainer.classList.remove('hidden');
         loadMoreBtn.classList.remove('hidden');
         totalImagesFound = numberOfImages;
       }
