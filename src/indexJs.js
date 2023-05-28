@@ -1,10 +1,15 @@
 // imports
+import SimpleLightbox from 'simplelightbox';
 
 import Notiflix from 'notiflix';
 import { getElement } from './jsFiles/getElement.js';
 import { receivedImages } from './jsFiles/fetchRequests.js';
-import { displayImages, clearGallery } from './jsFiles/displayHandlers.js';
-
+import {
+  displayImages,
+  clearGallery,
+  displayImagesForScrolling,
+} from './jsFiles/displayHandlers.js';
+import { scrollHandler } from './jsFiles/scrollHandler.js';
 // variabiles
 
 const searchForm = getElement('.search-form');
@@ -18,23 +23,53 @@ let imagesPerPage = 40;
 let pageNum = null;
 let totalImagesFound = null;
 
+var lightbox = new SimpleLightbox('.gallery a', {
+  capttion: true,
+  captionSelector: 'img',
+  captionType: 'attr',
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
 const loadNextImages = async () => {
   pageNum++;
   const totalpages = Math.ceil(totalImagesFound / imagesPerPage);
   try {
     const submitResponse = await receivedImages(typedValue, pageNum);
     const newImages = submitResponse.hits;
-    gallery.innerHTML = '';
     displayImages(newImages);
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
+    lightbox.refresh();
+
     if (pageNum === totalpages) {
       Notiflix.Notify.warning(
         "We're sorry, but you've reached the end of search results."
       );
       loadMoreBtn.classList.add('hidden');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const infiniteLoading = async () => {
+  pageNum++;
+  const totalpages = Math.ceil(totalImagesFound / imagesPerPage);
+  try {
+    const submitResponse = await receivedImages(typedValue, pageNum);
+    const newImages = submitResponse.hits;
+    displayImagesForScrolling(newImages);
+    lightbox.refresh();
+
+    if (pageNum === totalpages) {
+      Notiflix.Notify.warning(
+        "We're sorry, but you've reached the end of search results."
+      );
+      loadMoreBtn.classList.add('hidden');
+      window.removeEventListener('scroll', scrollHandler);
     }
   } catch (err) {
     console.log(err);
@@ -66,6 +101,7 @@ const submitHandler = async e => {
         loadMoreBtn.classList.remove('hidden');
         totalImagesFound = numberOfImages;
       }
+      lightbox.refresh();
     } catch (err) {
       console.log(err);
     }
@@ -77,3 +113,4 @@ const submitHandler = async e => {
 
 searchForm.addEventListener('submit', submitHandler);
 loadMoreBtn.addEventListener('click', loadNextImages);
+window.addEventListener('scroll', scrollHandler);
