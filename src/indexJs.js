@@ -17,6 +17,8 @@ const formInput = getElement('.search-form input');
 export const gallery = getElement('.gallery');
 export const loadMoreBtn = getElement('.load-more');
 export const loading = getElement('.loading');
+const selectScrollingTypeBtn = getElement('.select-scrolling-btn');
+const selectScrollingContainer = getElement('.select-scrolling-mode');
 
 let typedValue = '';
 let imagesPerPage = 40;
@@ -31,19 +33,13 @@ var lightbox = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
-const loadNextImages = async () => {
+const fetchNextPage = async () => {
   pageNum++;
   const totalpages = Math.ceil(totalImagesFound / imagesPerPage);
   try {
     const submitResponse = await receivedImages(typedValue, pageNum);
     const newImages = submitResponse.hits;
     displayImages(newImages);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-    lightbox.refresh();
-
     if (pageNum === totalpages) {
       Notiflix.Notify.warning(
         "We're sorry, but you've reached the end of search results."
@@ -53,6 +49,15 @@ const loadNextImages = async () => {
   } catch (err) {
     console.log(err);
   }
+};
+
+const loadNextImages = async () => {
+  selectScrollingContainer.classList.add('hidden');
+  fetchNextPage();
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
 };
 
 export const infiniteLoading = async () => {
@@ -113,4 +118,8 @@ const submitHandler = async e => {
 
 searchForm.addEventListener('submit', submitHandler);
 loadMoreBtn.addEventListener('click', loadNextImages);
-window.addEventListener('scroll', scrollHandler);
+selectScrollingTypeBtn.addEventListener('click', () => {
+  window.addEventListener('scroll', scrollHandler);
+  selectScrollingContainer.classList.add('hidden');
+  loadMoreBtn.classList.add('hidden');
+});

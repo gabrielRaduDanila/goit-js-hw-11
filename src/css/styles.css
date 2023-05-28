@@ -102,6 +102,21 @@ body {
   font-weight: 600;
 }
 
+.select-scrolling-mode {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-scrolling-btn {
+  margin-left: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: blue;
+  min-width: fit-content;
+}
+
 
 .hidden {
   display: none;
